@@ -1,0 +1,13 @@
+on: workflow_dispatch
+name: Build FFmpeg
+
+jobs:
+  build-osx:
+    name: Build (OSX)
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build
+        run: ${GITHUB_WORKSPACE}/scripts/osx/fetch_and_build.sh
