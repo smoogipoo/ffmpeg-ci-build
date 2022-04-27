@@ -39,9 +39,11 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: osx-x86_64
+          path: osx-x86_64
       - uses: actions/download-artifact@v3
         with:
           name: osx-arm64
+          path: osx-arm64
 
       - name: Combine
         run: ${{ github.workspace }}/scripts/osx/combine_universal.sh
