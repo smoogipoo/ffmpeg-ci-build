@@ -1,53 +1,42 @@
-# install dependencies (ubuntu)
+#!/bin/bash
 
+cross_arch=''
+cross_prefix=''
+
+case $arch in
+    win-x86)
+        cross_arch='x86'
+        cross_prefix='i686-w64-mingw32-'
+        ;;
+
+    win-x64)
+        cross_arch='x86'
+        cross_prefix='x86_64-w64-mingw32-'
+        ;;
+
+    win-arm64)
+        cross_arch='aarch64'
+        cross_prefix='aarch64-w64-mingw32-'
+        ;;
+esac
 
 # grab & extract source
 curl https://ffmpeg.org/releases/ffmpeg-4.3.3.tar.gz | tar zxf -
 cd ffmpeg-4.3.3
 
-# build 32-bit libs
 ./configure \
     --disable-programs \
     --disable-doc \
     --disable-static \
     --disable-debug \
     --enable-shared \
-    --arch=x86 \
+    --arch=$cross_arch \
     --target-os=mingw32 \
-    --cross-prefix=i686-w64-mingw32- \
-    --prefix=build-win32
+    --cross-prefix=$cross_prefix \
+    --prefix=build-$arch
 
 make -j$(nproc)
 make install
 
-# build 64-bit libs
-./configure \
-    --disable-programs \
-    --disable-doc \
-    --disable-static \
-    --disable-debug \
-    --enable-shared \
-    --arch=x86 \
-    --target-os=mingw32 \
-    --cross-prefix=x86_64-w64-mingw32- \
-    --prefix=build-win64
-
-make -j$(nproc)
-make install
-
-# build arm64 libs
-./configure \
-    --disable-programs \
-    --disable-doc \
-    --disable-static \
-    --disable-debug \
-    --enable-shared \
-    --arch=aarch64 \
-    --target-os=mingw32 \
-    --cross-prefix=aarch64-w64-mingw32- \
-    --prefix=build-win-arm64
-
-# copy libs into place
-cp build-win32/bin/*.dll ../artifacts/win-x86/
-cp build-win64/bin/*.dll ../artifacts/win-x64/
-cp build-win-arm64/bin/*.dll ../artifacts/win-arm64/
+mkdir -p ../build-$arch
+cp build-$arch/bin/*.dll ../build-$arch/

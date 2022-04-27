@@ -3,36 +3,41 @@ name: Build FFmpeg
 
 jobs:
   build-osx:
-    name: Build (OSX)
+    name: Build
     runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch:
+          - x86_64
+          - arm64
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - uses: ilammy/setup-nasm@v1
 
-      - name: Build (x86_64)
+      - name: Build
         run: ${GITHUB_WORKSPACE}/scripts/osx/fetch_and_build.sh
         env:
-          arch: x86_64
+          arch: ${{ matrix.arch }}
 
-      - name: Build (arm64)
-        run: ${GITHUB_WORKSPACE}/scripts/osx/fetch_and_build.sh
-        env:
-          arch: arm64
-
-      - name: Combine
-        run: ${GITHUB_WORKSPACE}/scripts/osx/combine_universal.sh
-
-      - name: Upload artifacts
+      - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: ffmpeg-osx
-          path: ${GITHUB_WORKSPACE}/artifacts/
+          name: osx-${{ matrix.arch }}
+          path: ${GITHUB_WORKSPACE}/build-${{ matrix.arch }}
 
   build-win:
-    name: Build (Windows)
+    name: Build
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch:
+          - win-x86
+          - win-x64
+          - win-arm64
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -44,9 +49,11 @@ jobs:
 
       - name: Build
         run: ${GITHUB_WORKSPACE}/scripts/win/fetch_and_build.sh
+        env:
+          arch: ${{ matrix.arch }}
 
-      - name: Upload artifacts
+      - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: ffmpeg-win
-          path: ${GITHUB_WORKSPACE}/artifacts/
+          name: win-${{ matrix.arch }}
+          path: ${GITHUB_WORKSPACE}/build-${{ matrix.arch }}
