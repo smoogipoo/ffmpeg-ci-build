@@ -35,6 +35,19 @@ make install
 make -j$(nproc)
 make install
 
+# build arm64 libs
+./configure \
+    --disable-programs \
+    --disable-doc \
+    --disable-static \
+    --disable-debug \
+    --enable-shared \
+    --arch=aarch64 \
+    --target-os=mingw32 \
+    --cross-prefix=aarch64-w64-mingw32- \
+    --prefix=build-win-arm64
+
 # copy libs into place
 cp build-win32/bin/*.dll ../artifacts/win-x86/
 cp build-win64/bin/*.dll ../artifacts/win-x64/
+cp build-win-arm64/bin/*.dll ../artifacts/win-arm64/
