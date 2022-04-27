@@ -100,3 +100,21 @@ jobs:
         with:
           name: win-arm64
           path: build-arm64
+
+  build-linux:
+    name: Build Linux (x64)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: ilammy/setup-nasm@v1
+
+      - name: Build
+        run: scripts/linux/fetch_and_build.sh
+
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-x64
+          path: build-x64

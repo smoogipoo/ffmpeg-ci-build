@@ -20,7 +20,6 @@ case $arch in
         ;;
 esac
 
-# grab & extract source
 curl https://ffmpeg.org/releases/ffmpeg-4.3.3.tar.gz | tar zxf -
 cd ffmpeg-4.3.3
 
