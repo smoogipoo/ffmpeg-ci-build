@@ -1,16 +1,4 @@
 #!/bin/bash
-PS3='Build for which arch? '
-archs=("arm64" "x86_64")
-select arch in "${archs[@]}"; do
-    case $arch in
-        "arm64")
-            break;;
-        "x86_64")
-            break;;
-        *) echo "invalid option";;
-    esac
-done
-# set -x
 
 if [ ! -d "ffmpeg-4.3.3" ]
 then
@@ -22,7 +10,21 @@ fi
 cd ffmpeg-4.3.3
 
 echo "-> Configuring..."
-./configure --disable-programs --disable-doc --disable-static --disable-debug --enable-shared --arch=$arch --prefix=build-$arch --libdir=build-$arch/lib
+
+./configure \
+    --disable-programs \
+    --disable-doc \
+    --disable-static \
+    --disable-debug \
+    --enable-shared \
+    --target-os=darwin \
+    --arch=$arch \
+    --enable-cross-compile \
+    --extra-cflags='-arch $arch' \
+    --extra-ldflags='-arch $arch' \
+    --prefix=build-$arch \
+    --libdir=build-$arch/lib
+
 CORES=$(sysctl -n hw.ncpu)
 echo "-> Building using $CORES threads..."
 make -j$CORES

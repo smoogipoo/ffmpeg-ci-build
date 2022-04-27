@@ -1,4 +1,4 @@
-on: workflow_dispatch
+on: push
 name: Build FFmpeg
 
 jobs:
@@ -9,5 +9,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Build
+      - uses: ilammy/setup-nasm@v1
+
+      - name: Build (x86_64)
         run: ${GITHUB_WORKSPACE}/scripts/osx/fetch_and_build.sh
+        env:
+          arch: x86_64
+
+      - name: Build (arm64)
+        run: ${GITHUB_WORKSPACE}/scripts/osx/fetch_and_build.sh
+        env:
+          arch: arm64
+
+      - name: Combine
+        run: ${GITHUB_WORKSPACE}/scripts/osx/combine_universal.sh
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ffmpeg-osx
+          path: ${GITHUB_WORKSPACE}/artifacts/
