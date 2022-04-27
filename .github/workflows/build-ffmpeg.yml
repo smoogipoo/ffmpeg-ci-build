@@ -3,7 +3,7 @@ name: Build FFmpeg
 
 jobs:
   build-osx:
-    name: Build
+    name: Build OSX
     runs-on: macos-latest
     strategy:
       fail-fast: false
@@ -29,14 +29,14 @@ jobs:
           path: ${{ github.workspace }}/build-${{ matrix.arch }}
 
   build-win:
-    name: Build
+    name: Build Windows
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         arch:
-          - win-x86
-          - win-x64
+          - x86
+          - x64
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -54,11 +54,11 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.arch }}
-          path: ${{ github.workspace }}/build-${{ matrix.arch }}
+          name: win-${{ matrix.arch }}
+          path: ${{ github.workspace }}/build-win-${{ matrix.arch }}
 
   build-win-arm64:
-    name: Build (win-arm64)
+    name: Build Windows (arm64)
     runs-on: ubuntu-latest
     container:
       image: mstorsjo/llvm-mingw:latest
@@ -69,7 +69,7 @@ jobs:
       - name: Build
         run: scripts/win/fetch_and_build.sh
         env:
-          arch: win-arm64
+          arch: arm64
 
       - name: Upload
         uses: actions/upload-artifact@v3
