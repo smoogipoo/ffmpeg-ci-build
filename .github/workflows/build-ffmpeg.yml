@@ -18,7 +18,7 @@ jobs:
       - uses: ilammy/setup-nasm@v1
 
       - name: Build
-        run: ${GITHUB_WORKSPACE}/scripts/osx/fetch_and_build.sh
+        run: ${{ github.workspace }}/scripts/osx/fetch_and_build.sh
         env:
           arch: ${{ matrix.arch }}
 
@@ -26,7 +26,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: osx-${{ matrix.arch }}
-          path: ${GITHUB_WORKSPACE}/build-${{ matrix.arch }}
+          path: ${{ github.workspace }}/build-${{ matrix.arch }}
 
   build-win:
     name: Build
@@ -48,7 +48,7 @@ jobs:
           sudo apt-get install make nasm gcc mingw-w64
 
       - name: Build
-        run: ${GITHUB_WORKSPACE}/scripts/win/fetch_and_build.sh
+        run: ${{ github.workspace }}/scripts/win/fetch_and_build.sh
         env:
           arch: ${{ matrix.arch }}
 
@@ -56,4 +56,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: win-${{ matrix.arch }}
-          path: ${GITHUB_WORKSPACE}/build-${{ matrix.arch }}
+          path: ${{ github.workspace }}/build-${{ matrix.arch }}
