@@ -39,4 +39,4 @@ make -j$(nproc)
 make install
 
 mkdir -p ../build-$arch
-cp build-$arch/bin/*.dll ../build-win-$arch/
+cp build-$arch/bin/*.dll ../build-$arch/

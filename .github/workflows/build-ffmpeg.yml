@@ -79,7 +79,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: win-${{ matrix.arch }}
-          path: ${{ github.workspace }}/build-win-${{ matrix.arch }}
+          path: ${{ github.workspace }}/build-${{ matrix.arch }}
 
   build-win-arm64:
     name: Build Windows (arm64)
@@ -99,4 +99,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: win-arm64
-          path: build-win-arm64
+          path: build-arm64
