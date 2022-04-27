@@ -37,7 +37,6 @@ jobs:
         arch:
           - win-x86
           - win-x64
-          - win-arm64
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -55,5 +54,25 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: win-${{ matrix.arch }}
+          name: ${{ matrix.arch }}
           path: ${{ github.workspace }}/build-${{ matrix.arch }}
+
+  build-win-arm64:
+    name: Build (win-arm64)
+    runs-on: ubuntu-latest
+    container:
+      image: mstorsjo/llvm-mingw:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build
+        run: scripts/win/fetch_and_build.sh
+        env:
+          arch: win-arm64
+
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: win-arm64
+          path: build-win-arm64
